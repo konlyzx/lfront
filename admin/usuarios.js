@@ -13,7 +13,7 @@ import {
 // Configuración de la URL del backend
 // Si estamos en desarrollo local, usamos localhost, sino la URL de producción
 const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const BACKEND_URL = isLocalDev ? 'http://159.223.204.253:3001' : 'http://159.223.204.253:3001';
+const BACKEND_URL = isLocalDev ? 'https://api.legaly.space' : 'https://api.legaly.space';
 console.log('🔌 Conectando con el backend en:', BACKEND_URL);
 
 // URLs de API
