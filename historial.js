@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- URLs y Estado de Backend --- 
-    const BASE_PORTS = [3001, 3002, 3003, 3004, 3005]; 
+    const BASE_PORTS = [3001, 3002, 3003, 3004, 3005, 443, 80, 8080, 8443]; 
     let API_BASE_URL = ''; 
     let API_HISTORIAL_URL = ''; 
 
