@@ -141,24 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica Principal --- 
 
-    async function findActiveBackend() {
-        for (const port of BASE_PORTS) {
-            try {
-                const url = `https://api.legaly.space:443`;  // aquí usas el puerto en la url
-                const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(1000) });
-                if (response.ok) {
-                    API_BASE_URL = url;
-                    API_HISTORIAL_URL = `${API_BASE_URL}/api/historial`;
-                    console.log(`Backend encontrado en ${API_BASE_URL}`);
-                    return true;
-                }
-            } catch (error) { 
-                // Ignorar errores de conexión, pero podrías loguearlos para debug
-                console.log(`No response from ${port}: ${error.message}`);
+    async function checkBackend() {
+        try {
+            const response = await fetch('https://api.legaly.space', { method: 'GET', signal: AbortSignal.timeout(1000) });
+            if (response.ok) {
+                console.log('Backend funcionando en https://api.legaly.space');
+                return true;
             }
+        } catch (error) {
+            console.log('No response from backend:', error.message);
         }
         return false;
     }
+    
     
 
     // Cargar datos del historial
