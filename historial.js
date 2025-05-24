@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function findActiveBackend() {
         for (const port of BASE_PORTS) {
             try {
-                const url = `https://api.legaly.space:${port}`;  // aquí usas el puerto en la url
+                const url = `https://api.legaly.space:443`;  // aquí usas el puerto en la url
                 const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(1000) });
                 if (response.ok) {
                     API_BASE_URL = url;
