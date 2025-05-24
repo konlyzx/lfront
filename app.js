@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function findActiveBackend() {
         for (const port of BASE_PORTS) {
             try {
-                const url = `https://api.legaly.space/api/historial`;
+                const url = `https://api.legaly.space`;
                 const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(1000) });
                 if (response.ok) {
                     API_BASE_URL = url;
