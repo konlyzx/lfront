@@ -1,0 +1,405 @@
+/* Estilos para el Manual de Usuario - Confialegal - Diseño de Libro Simplificado */
+
+/* Contenedor principal del manual */
+.manual-container {
+    position: relative;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* El libro en sí */
+.book {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Portada del libro */
+.book-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: linear-gradient(45deg, #1a237e, #3949ab);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.7s ease;
+}
+
+.book-cover.open {
+    transform: translateX(-100%);
+}
+
+.book-cover img.logo {
+    max-width: 200px;
+    margin-bottom: 30px;
+}
+
+.book-cover h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.book-cover p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.book-cover .start-button {
+    padding: 12px 25px;
+    background-color: rgba(255,255,255,0.2);
+    border: 2px solid white;
+    color: white;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.book-cover .start-button:hover {
+    background-color: white;
+    color: #1a237e;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Contenido del libro */
+.book-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    overflow: auto;
+}
+
+/* Páginas individuales */
+.page {
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: white;
+    display: none;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    color: #1a237e;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.page-content {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 1.1rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* Controles de navegación */
+.book-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #1565c0;
+    transform: translateY(-2px);
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Tarjetas informativas */
+.manual-card {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    background-color: #f5f7fa;
+    border-left: 5px solid #1565c0;
+}
+
+.manual-card h3 {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #1565c0;
+}
+
+.manual-card h3 i {
+    margin-right: 10px;
+}
+
+.manual-card.info {
+    background-color: #e8f4fc;
+    border-left-color: #2196f3;
+}
+
+.manual-card.info h3 {
+    color: #2196f3;
+}
+
+.manual-card.warning {
+    background-color: #fff8e1;
+    border-left-color: #ffa000;
+}
+
+.manual-card.warning h3 {
+    color: #ffa000;
+}
+
+.manual-card ul {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.manual-card li {
+    margin-bottom: 5px;
+}
+
+/* Estilo para los pasos del tutorial */
+.step {
+    display: flex;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: translateX(5px);
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background-color: #1976d2;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-right: 15px;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.step-content h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #2980b9;
+    font-size: 1.15rem;
+}
+
+.step-image, .dashboard-preview {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin: 15px 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+    cursor: zoom-in;
+}
+
+.image-caption {
+    text-align: center;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.tip {
+    background-color: #e3f2fd;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.tip i {
+    color: #1976d2;
+    margin-right: 10px;
+}
+
+/* Preguntas frecuentes */
+.faq-container {
+    margin-top: 15px;
+}
+
+.faq-item {
+    margin-bottom: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #f5f7fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+    background-color: #e3f2fd;
+}
+
+.faq-question h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #34495e;
+}
+
+.faq-question i {
+    color: #1976d2;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    padding: 15px;
+    max-height: 500px;
+}
+
+/* Estilos para el modal de zoom de imágenes */
+.image-zoom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    cursor: zoom-out;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-zoom-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.image-zoom-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.zoom-controls button {
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zoom-controls button:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .book {
+        height: 70vh;
+    }
+    
+    .book-cover h1 {
+        font-size: 2rem;
+    }
+    
+    .page {
+        padding: 20px;
+    }
+    
+    .step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        margin-bottom: 10px;
+    }
+} 

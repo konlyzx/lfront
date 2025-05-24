@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="view-transition" content="same-origin">
+    <title>Manual de Usuario - Confialegal</title>
+    <!-- FontAwesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="manual-styles.css">
+</head>
+<body>
+    <!-- Script para proteger ruta -->
+    <script type="module">
+        import { auth, onAuthStateChanged, db, doc, getDoc } from "./js/firebaseConfig.js";
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // No está logueado → lo mandamos al login
+                window.location.href = "login.html";
+                return;
+            }
+            
+            try {
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+                
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    // Mostrar información del usuario
+                    document.getElementById("userEmail").textContent = user.email;
+                    document.getElementById("userName").textContent = userData.name || "Usuario";
+                    document.getElementById("userInfoPanel").style.display = "flex";
+                    
+                    // Si es admin, mostrar enlace al panel
+                    if (userData.role === "admin") {
+                        const adminLink = document.createElement("li");
+                        adminLink.innerHTML = `<a href="admin/index.html" data-page="admin"><i class="fas fa-user-shield icon"></i> Panel Admin</a>`;
+                        document.querySelector(".sidebar-nav ul").appendChild(adminLink);
+                    }
+                } else {
+                    console.error("No se encontró el perfil del usuario");
+                }
+            } catch (err) {
+                console.error("Error al verificar usuario:", err);
+            }
+        });
+    </script>
+
+    <div class="app-container">
+        <!-- Sidebar de Navegación -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="Confialegal Logo" class="logo"> 
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" data-page="signature"><i class="fas fa-signature icon"></i> Envío de Firma</a></li>
+                    <li><a href="historial.html" data-page="history"><i class="fas fa-history icon"></i> Historial</a></li>
+                    <li class="active"><a href="manual-usuario.html" data-page="manual"><i class="fas fa-book icon"></i> Manual de Usuario</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content" id="main-content">
+            <header class="main-header" id="main-header">
+                <h1>Manual de Usuario - Legaly</h1>
+                <div id="userInfoPanel" style="display: none; padding: 10px 15px; background-color: #f8fafc; border-radius: 8px; align-items: center; justify-content: space-between;">
+                    <p>Bienvenido, <strong id="userName">Usuario</strong> (<span id="userEmail">usuario@ejemplo.com</span>)</p>
+                    <button id="logoutBtn" style="padding: 6px 12px; background-color: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </header>
+
+            <section class="content-area" id="content-area">
+                <div class="manual-container">
+                    <!-- Libro - Estructura principal -->
+                    <div class="book" id="manual-book">
+                        <!-- Portada del libro -->
+                        <div class="book-cover" id="book-cover">
+                            <img src="img/logo2.png" alt="Legaly Logo" class="logo">
+                            <h1>Manual de Usuario</h1>
+                            <p>Guía completa para usar la plataforma Legaly</p>
+                            <button class="start-button" id="start-reading">Comenzar a leer</button>
+                        </div>
+                        
+                        <!-- Contenido interno del libro - PÁGINAS SIMPLIFICADAS -->
+                        <div class="book-content">
+                            <!-- Página 1 - Introducción -->
+                            <div class="page" id="page-1">
+                                <h2 class="page-title">Introducción a Legaly</h2>
+                                <div class="page-content">
+                                    <p>Bienvenido a Legaly, la plataforma que te permite enviar documentos para firma digital de manera segura y rápida a través de WhatsApp. Este manual te guiará paso a paso en el uso de todas las funcionalidades de nuestra plataforma.</p>
+                                    
+                                    <div class="manual-card">
+                                        <h3><i class="fas fa-info-circle"></i> ¿Qué es Legaly?</h3>
+                                        <p>Legaly es una plataforma que permite a empresas y profesionales enviar documentos para firma electrónica a través de WhatsApp, simplificando el proceso de obtención de firmas y asegurando la validez legal de las mismas.</p>
+                                    </div>
+
+                                    <img src="img/tutorial/dashboard-preview.png" alt="Vista previa del dashboard" class="dashboard-preview">
+                                    <p class="image-caption">Vista general de la plataforma Legaly</p>
+                                </div>
+                                <div class="page-number">1</div>
+                            </div>
+                            
+                            <!-- Página 2 - Envío de Firma (Parte 1) -->
+                            <div class="page" id="page-2">
+                                <h2 class="page-title">Cómo enviar un documento para firma (1/3)</h2>
+                                <div class="page-content">
+                                    <p>Sigue estos sencillos pasos para enviar un documento a firmar:</p>
+
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h3>Ingresa el número de WhatsApp del destinatario</h3>
+                                            <p>Escribe el número de teléfono completo incluyendo el código del país (Ej: 573161234567 para Colombia).</p>
+                                            <div class="tip"><i class="fas fa-lightbulb"></i> Asegúrate de que el número tenga WhatsApp activo.</div>
+                                            <img src="img/tutorial/paso1.png" alt="Paso 1" class="step-image">
+                                        </div>
+                                    </div>
+
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h3>Ingresa el nombre del destinatario</h3>
+                                            <p>Escribe el nombre y apellido de la persona que firmará el documento.</p>
+                                            <img src="img/tutorial/paso2.png" alt="Paso 2" class="step-image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-number">2</div>
+                            </div>
+                            
+                            <!-- Página 3 - Envío de Firma (Parte 2) -->
+                            <div class="page" id="page-3">
+                                <h2 class="page-title">Cómo enviar un documento para firma (2/3)</h2>
+                                <div class="page-content">
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h3>Ingresa tu nombre o el de tu empresa</h3>
+                                            <p>Este nombre aparecerá como remitente del documento.</p>
+                                            <img src="img/tutorial/paso3.png" alt="Paso 3" class="step-image">
+                                        </div>
+                                    </div>
+
+                                    <div class="step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <h3>Sube el documento PDF para firma</h3>
+                                            <p>Arrastra y suelta el archivo PDF o haz clic para seleccionarlo desde tu dispositivo.</p>
+                                            <div class="tip"><i class="fas fa-lightbulb"></i> Solo se aceptan archivos en formato PDF.</div>
+                                            <img src="img/tutorial/paso4.png" alt="Paso 4" class="step-image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-number">3</div>
+                            </div>
+                            
+                            <!-- Página 4 - Envío de Firma (Parte 3) -->
+                            <div class="page" id="page-4">
+                                <h2 class="page-title">Cómo enviar un documento para firma (3/3)</h2>
+                                <div class="page-content">
+                                    <div class="step">
+                                        <div class="step-number">5</div>
+                                        <div class="step-content">
+                                            <h3>Envía la invitación para firma</h3>
+                                            <p>Haz clic en el botón "Enviar Invitación de Firma". El destinatario recibirá un mensaje en WhatsApp con un enlace para iniciar el proceso de firma.</p>
+                                            <img src="img/tutorial/paso5.png" alt="Paso 5" class="step-image">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="manual-card info">
+                                        <h3><i class="fas fa-check-circle"></i> Confirmación de envío</h3>
+                                        <p>Una vez enviado correctamente, verás una animación de confirmación con los datos del destinatario.</p>
+                                    </div>
+                                </div>
+                                <div class="page-number">4</div>
+                            </div>
+                            
+                            <!-- Página 5 - Historial -->
+                            <div class="page" id="page-5">
+                                <h2 class="page-title">Cómo ver el historial de documentos</h2>
+                                <div class="page-content">
+                                    <p>Puedes acceder al historial de todos los documentos enviados para monitorear su estado:</p>
+
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h3>Accede a la sección de Historial</h3>
+                                            <p>Haz clic en la opción "Historial" en el menú lateral izquierdo.</p>
+                                            <img src="img/tutorial/historial1.png" alt="Historial paso 1" class="step-image">
+                                        </div>
+                                    </div>
+
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h3>Visualiza el estado de tus documentos</h3>
+                                            <p>Podrás ver todos los documentos enviados con su estado actual, fecha de envío y destinatario.</p>
+                                            <img src="img/tutorial/historial2.png" alt="Historial paso 2" class="step-image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-number">5</div>
+                            </div>
+                            
+                            <!-- Página 6 - Estados de Documentos -->
+                            <div class="page" id="page-6">
+                                <h2 class="page-title">Estados de los documentos</h2>
+                                <div class="page-content">
+                                    <div class="manual-card warning">
+                                        <h3><i class="fas fa-exclamation-triangle"></i> Estados de documentos</h3>
+                                        <p>Los documentos pueden tener varios estados:</p>
+                                        <ul>
+                                            <li><strong>Enviado:</strong> El documento fue enviado pero aún no ha sido firmado.</li>
+                                            <li><strong>Firmado:</strong> El documento ya fue firmado por el destinatario.</li>
+                                            <li><strong>Rechazado:</strong> El destinatario rechazó la firma del documento.</li>
+                                            <li><strong>Expirado:</strong> El plazo para firmar el documento ha vencido.</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h3>Plantillas (Próximamente)</h3>
+                                    <p>Las plantillas te permiten agilizar el envío de documentos recurrentes:</p>
+
+                                    <div class="manual-card info">
+                                        <h3><i class="fas fa-info-circle"></i> Próximamente</h3>
+                                        <p>La función de plantillas estará disponible en próximas actualizaciones.</p>
+                                    </div>
+                                    
+                                    <p>Las plantillas te permitirán:</p>
+                                    <ul>
+                                        <li>Guardar documentos de uso frecuente</li>
+                                        <li>Establecer campos para personalizar rápidamente</li>
+                                        <li>Enviar el mismo documento a múltiples destinatarios</li>
+                                        <li>Ahorrar tiempo en el proceso de envío</li>
+                                    </ul>
+                                </div>
+                                <div class="page-number">6</div>
+                            </div>
+                            
+                            <!-- Página 7 - FAQ (Parte 1) -->
+                            <div class="page" id="page-7">
+                                <h2 class="page-title">Preguntas frecuentes (1/2)</h2>
+                                <div class="page-content">
+                                    <div class="faq-container">
+                                        <div class="faq-item">
+                                            <div class="faq-question">
+                                                <h3>¿Es legal la firma electrónica a través de WhatsApp?</h3>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="faq-answer">
+                                                <p>Sí, la firma electrónica a través de WhatsApp cumple con los requisitos legales establecidos en la normativa sobre firmas electrónicas. Confialegal asegura la validez legal de las firmas mediante la verificación de identidad y el registro de evidencias del proceso de firma.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="faq-item">
+                                            <div class="faq-question">
+                                                <h3>¿Qué pasa si el destinatario no tiene WhatsApp?</h3>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="faq-answer">
+                                                <p>Para utilizar Legaly, el destinatario debe tener una cuenta activa de WhatsApp en el número proporcionado. Si no tiene WhatsApp, no podrá recibir la invitación para firmar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-number">7</div>
+                            </div>
+                            
+                            <!-- Página 8 - FAQ (Parte 2) -->
+                            <div class="page" id="page-8">
+                                <h2 class="page-title">Preguntas frecuentes (2/2)</h2>
+                                <div class="page-content">
+                                    <div class="faq-container">
+                                        <div class="faq-item">
+                                            <div class="faq-question">
+                                                <h3>¿Cuánto tiempo tiene el destinatario para firmar?</h3>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="faq-answer">
+                                                <p>Por defecto, los documentos enviados para firma tienen un plazo de validez de 7 días. Pasado este tiempo, el enlace expirará y aparecerá como "Expirado" en el historial.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="faq-item">
+                                            <div class="faq-question">
+                                                <h3>¿Cómo puedo saber si mi documento ya fue firmado?</h3>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="faq-answer">
+                                                <p>Puedes consultar el estado de tus documentos en la sección "Historial". Cuando un documento sea firmado, su estado cambiará automáticamente a "Firmado".</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="faq-item">
+                                            <div class="faq-question">
+                                                <h3>¿Puedo cancelar un documento enviado?</h3>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="faq-answer">
+                                                <p>Sí, puedes cancelar un documento antes de que sea firmado. Ve a la sección "Historial", localiza el documento y usa la opción de cancelar. El destinatario ya no podrá acceder al proceso de firma.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="page-number">8</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Controles de navegación -->
+                    <div class="book-navigation">
+                        <button class="nav-button" id="prev-page" disabled>
+                            <i class="fas fa-arrow-left"></i> Página anterior
+                        </button>
+                        <button class="nav-button" id="next-page">
+                            Página siguiente <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Modal de zoom para imágenes -->
+    <div class="image-zoom-overlay" id="imageZoomOverlay">
+        <img id="zoomedImage" src="" alt="Imagen ampliada">
+        <div class="zoom-controls">
+            <button id="zoomOut"><i class="fas fa-search-minus"></i></button>
+            <button id="zoomIn"><i class="fas fa-search-plus"></i></button>
+        </div>
+    </div>
+    
+    <footer>    
+        <div class="footer-content">
+            <p>© 2025 Legaly. Todos los derechos reservados.</p>
+        </div>
+        <div class="footer-content">
+            <p>
+                <a href="terminos-condiciones.html">Términos y Condiciones</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Flip.min.js"></script>
+    <script src="manual-usuario.js"></script>
+
+    <!-- Añadir esta sección dentro del header de la página, justo después del h1 -->
+    <script type="module">
+        import { auth, signOut } from "./js/firebaseConfig.js";
+        
+        // Manejar cierre de sesión
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "login.html";
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                alert("Error al cerrar sesión");
+            }
+        });
+    </script>
+</body>
+</html> 

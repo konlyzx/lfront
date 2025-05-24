@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="view-transition" content="same-origin">
+    <title>Panel de Administración - Legaly</title>
+    <!-- FontAwesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-header {
+            background: linear-gradient(45deg, #1a237e, #3949ab);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .admin-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-card h3 {
+            color: #1a237e;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1976d2;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .stat-icon {
+            background-color: #e3f2fd;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: #1976d2;
+            font-size: 1.5rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .primary-btn {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+        }
+        
+        .primary-btn:hover {
+            background-color: #1565c0;
+            transform: translateY(-2px);
+        }
+        
+        .secondary-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .secondary-btn:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        #userInfoPanel {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Script para proteger ruta -->
+    <script type="module">
+        import { auth, onAuthStateChanged, db, doc, getDoc } from "../js/firebaseConfig.js";
+        
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // No está logueado → lo mandamos al login
+                window.location.href = "../login.html";
+                return;
+            }
+            
+            // Verificar que sea administrador
+            try {
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+                
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    if (userData.role !== "admin") {
+                        // No es administrador, redirigir
+                        alert("No tienes permisos para acceder a esta área");
+                        window.location.href = "../index.html";
+                    } else {
+                        // Es administrador, mostrar datos
+                        document.getElementById("userEmail").textContent = user.email;
+                        document.getElementById("userName").textContent = userData.name || "Administrador";
+                        document.getElementById("userInfoPanel").style.display = "block";
+                    }
+                } else {
+                    // No existe el documento
+                    alert("Error: Perfil de usuario no encontrado");
+                    window.location.href = "../login.html";
+                }
+            } catch (err) {
+                console.error("Error al verificar permisos:", err);
+                alert("Error al verificar permisos");
+                window.location.href = "../login.html";
+            }
+        });
+    </script>
+    
+    <div class="app-container">
+        <!-- Sidebar de Navegación -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="../img/logo.png" alt="Legaly Logo" class="logo"> 
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#" data-page="dashboard"><i class="fas fa-tachometer-alt icon"></i> Dashboard</a></li>
+                    <li><a href="usuarios.html" data-page="users"><i class="fas fa-users icon"></i> Usuarios</a></li>
+                    <li><a href="../index.html" data-page="frontend"><i class="fas fa-home icon"></i> Ir a Frontend</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content" id="main-content">
+            <header class="main-header" id="main-header">
+                <h1>Panel de Administración</h1>
+                <div id="userInfoPanel">
+                    <p>Bienvenido, <strong id="userName">Administrador</strong> (<span id="userEmail">admin@legaly.com</span>)</p>
+                    <button id="logoutBtn" class="secondary-btn action-btn">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </header>
+
+            <section class="content-area" id="content-area">
+                <div class="admin-header">
+                    <h2>Dashboard de Administración</h2>
+                    <p>Bienvenido al panel de administración. Desde aquí puedes gestionar todos los aspectos de la plataforma.</p>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Estadísticas Generales</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-signature"></i>
+                            </div>
+                            <div class="stat-value">125</div>
+                            <div class="stat-label">Documentos Firmados</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-value">48</div>
+                            <div class="stat-label">Usuarios Activos</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-value">32</div>
+                            <div class="stat-label">Pendientes de Firma</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">Tasa de Completado</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Acciones Rápidas</h3>
+                    <p>Selecciona una acción para gestionar la plataforma:</p>
+                    <div class="action-buttons">
+                        <a href="usuarios.html" class="action-btn primary-btn">
+                            <i class="fas fa-user-plus"></i> Añadir Usuario
+                        </a>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-file-export"></i> Exportar Datos
+                        </button>
+                        <button class="action-btn secondary-btn">
+                            <i class="fas fa-cog"></i> Configuración
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <footer>    
+        <div class="footer-content">
+            <p>© 2025 Legaly. Todos los derechos reservados.</p>
+        </div>
+        <div class="footer-content">
+            <p>
+                <a href="../terminos-condiciones.html">Términos y Condiciones</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script type="module">
+        import { auth, signOut } from "../js/firebaseConfig.js";
+        
+        // Manejar cierre de sesión
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "../login.html";
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                alert("Error al cerrar sesión");
+            }
+        });
+    </script>
+</body>
+</html> 

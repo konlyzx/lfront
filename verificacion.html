@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="view-transition" content="same-origin">
+    <title>Verificación de Documentos - Confialegal</title>
+    <!-- FontAwesome para los iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/frontend/styles.css">
+    <style>
+        /* Estilos específicos para verificación */
+        .verification-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .verification-step {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .code-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .code-input {
+            width: 50px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .code-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .documents-list {
+            width: 100%;
+            display: none; /* Inicialmente oculto */
+        }
+        
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        
+        .document-icon {
+            font-size: 24px;
+            color: #e74c3c;
+            margin-right: 15px;
+        }
+        
+        .document-details {
+            flex-grow: 1;
+            text-align: left;
+        }
+        
+        .document-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .document-date {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .document-download {
+            color: #3498db;
+            font-size: 18px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        
+        .loading-message, .info-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+        
+        .otp-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .otp-input {
+            width: 45px;
+            height: 55px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .otp-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar de Navegación -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="/frontend/img/logo.png" alt="Confialegal Logo" class="logo"> 
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/frontend/index.html" data-page="signature"><i class="fas fa-signature icon"></i> Envío de Firma</a></li>
+                    <li><a href="/frontend/historial.html" data-page="history"><i class="fas fa-history icon"></i> Historial</a></li>
+                    <li class="active"><a href="#" data-page="verification"><i class="fas fa-check-circle icon"></i> Verificación</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content" id="main-content">
+            <header class="main-header" id="main-header">
+                <h1>Verificación de Documentos</h1>
+            </header>
+
+            <section class="content-area" id="content-area">
+                <div class="form-card" id="form-card">
+                    <div class="verification-container">
+                        
+                        <div class="verification-step" id="phone-step">
+                            <h2><i class="fas fa-mobile-alt"></i> Ingresa tu número de teléfono</h2>
+                            <p>Te enviaremos un código de verificación a tu WhatsApp.</p>
+                            <div class="form-group">
+                                <input type="text" id="phone-input" placeholder="Ej: 573161234567" required>
+                                <small>Incluye el código de país (Ej. +57 para Colombia).</small>
+                            </div>
+                            <button id="send-code-btn" class="btn-primary"><i class="fas fa-paper-plane"></i> Enviar código</button>
+                        </div>
+
+                        <div class="verification-step" id="otp-step" style="display: none;">
+                            <h2><i class="fas fa-key"></i> Ingresa el código de verificación</h2>
+                            <p>Hemos enviado un código de 6 dígitos a tu WhatsApp (<span id="user-phone-display"></span>). Por favor, ingrésalo a continuación:</p>
+                            <div class="otp-input-container" id="otp-inputs">
+                                <input type="text" class="otp-input" maxlength="1" data-index="0">
+                                <input type="text" class="otp-input" maxlength="1" data-index="1">
+                                <input type="text" class="otp-input" maxlength="1" data-index="2">
+                                <input type="text" class="otp-input" maxlength="1" data-index="3">
+                                <input type="text" class="otp-input" maxlength="1" data-index="4">
+                                <input type="text" class="otp-input" maxlength="1" data-index="5">
+                            </div>
+                            <button id="verify-otp-btn" class="btn-primary" disabled><i class="fas fa-check"></i> Verificar código</button>
+                            <button id="resend-code-btn" class="btn-secondary"><i class="fas fa-redo"></i> Reenviar código</button>
+                        </div>
+                        
+                        <div class="verification-step documents-list" id="documents-step" style="display: none;">
+                            <h2><i class="fas fa-file-signature"></i> Tus documentos firmados</h2>
+                            <div id="documents-container">
+                                <div class="loading-spinner">
+                                    <i class="fas fa-spinner fa-spin"></i> Cargando documentos...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área de Estado/Notificaciones -->
+                <div id="status" class="status-notification" style="display: none;"></div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="/frontend/verificacion.js"></script>
+</body>
+</html> 

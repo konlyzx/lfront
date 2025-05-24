@@ -1,0 +1,5 @@
+# Normaliza los finales de línea en archivos de texto
+* text=auto
+
+# Ignora node_modules porque no debe versionarse
+node_modules/ text eol=lf
