@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameDisplay = document.getElementById('file-name-display');
     const sendButton = document.getElementById('sendBtn');
     const statusDiv = document.getElementById('status');
-    const formCard = document.getElementById('form-card') || document.getElementById('formCard');
+    const formCard = document.getElementById('form-card');
     const fileUploadArea = document.getElementById('file-upload-area');
     const fileUploadLabel = document.querySelector('.file-upload-label');
     const successAnimation = document.getElementById('success-animation');
@@ -99,13 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipientPhone = document.getElementById('recipient-phone');
     const mainContent = document.getElementById('main-content');
     // const optionalMessageInput = document.getElementById('optional-message'); // Si se usa en el futuro
-    
+
     // --- Asegurar que el contenido sea visible inicialmente ---
     document.body.style.opacity = 1;
     document.body.style.visibility = 'visible';
     mainContent.style.opacity = 1;
     formCard.style.opacity = 1;
     formCard.style.display = 'block';
+    
     // --- Inicialización de GSAP ---
     let formGroups = document.querySelectorAll('.form-group');
     
@@ -334,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function findActiveBackend() {
         for (const port of BASE_PORTS) {
             try {
-                const url = `https://api.legaly.space`;
+                const url = `https://api.legaly.space/`;
                 const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(1000) });
                 if (response.ok) {
                     API_BASE_URL = url;
@@ -349,13 +350,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar la aplicación
     async function initApp() {
-        const backendEncontrado = await findActiveBackend();
-        if (backendEncontrado) {
-          console.log("Backend activo listo");
+        // Iniciar animaciones de entrada
+        startEntryAnimations();
+        
+        showStatus('Conectando con el servidor...', 'loading');
+        const backendFound = await findActiveBackend();
+        if (backendFound) {
+            showStatus('Conectado al servidor - Listo para enviar invitaciones.', 'success');
         } else {
-          console.log("No se encontró backend");
+            showStatus('Error: No se pudo conectar al servidor backend.', 'error');
         }
-      }
+        
+        // Configurar eventos de arrastrar y soltar para el área de carga de archivos
+        setupDragAndDrop();
+    }
     
     // Iniciar animaciones de entrada
     function startEntryAnimations() {
