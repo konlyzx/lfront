@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.opacity = 1;
     document.body.style.visibility = 'visible';
     mainContent.style.opacity = 1;
+    formCard.style.opacity = 1;
     formCard.style.display = 'block';
     // --- Inicialización de GSAP ---
     let formGroups = document.querySelectorAll('.form-group');
@@ -330,28 +331,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica Principal --- 
 
     // Encontrar backend activo
-    // --- Funciones de Conexión con Backend ---
-async function findActiveBackend() {
-    const BASE_PORTS = [3001, 3002, 3003, 3004, 3005];
-    for (const port of BASE_PORTS) {
-        try {
-            const url = `https://api.legaly.space:${port}/api/historial`;
-            const response = await fetch(url, { 
-                method: 'GET', 
-                signal: AbortSignal.timeout(1000) 
-            });
-            if (response.ok) {
-                API_BASE_URL = `https://api.legaly.space:${port}`;
-                API_HISTORIAL_URL = `${API_BASE_URL}/api/historial`;
-                console.log(`Backend encontrado en ${API_BASE_URL}`);
-                return true;
-            }
-        } catch (error) {
-            console.log(`Error probando puerto ${port}:`, error.message);
+    async function findActiveBackend() {
+        for (const port of BASE_PORTS) {
+            try {
+                const url = `https://api.legaly.space${port}`;
+                const response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(1000) });
+                if (response.ok) {
+                    API_BASE_URL = url;
+                    API_SEND_FIRMA_UPLOAD_URL = `${API_BASE_URL}/api/send-firma-with-upload`;
+                    console.log(`Backend encontrado en ${API_BASE_URL}`);
+                    return true;
+                }
+            } catch (error) { /* Ignorar errores de conexión */ }
         }
+        return false;
     }
-    return false;
-}
 
     // Inicializar la aplicación
     async function initApp() {
