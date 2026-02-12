@@ -76,8 +76,18 @@ export default function HistorialPage() {
     return "";
   };
 
+  const sortedData = useMemo(() => {
+    return [...data].sort((a, b) => {
+      const aDate = new Date(getField(a, "date")).getTime();
+      const bDate = new Date(getField(b, "date")).getTime();
+      const safeA = Number.isNaN(aDate) ? 0 : aDate;
+      const safeB = Number.isNaN(bDate) ? 0 : bDate;
+      return safeB - safeA;
+    });
+  }, [data]);
+
   const filtered = useMemo(() => {
-    return data.filter((item) => {
+    return sortedData.filter((item) => {
       const st = getField(item, "status");
       if (statusFilter && st !== statusFilter) return false;
       if (dateFilter) {
@@ -96,10 +106,16 @@ export default function HistorialPage() {
       }
       return true;
     });
-  }, [data, statusFilter, dateFilter, search]);
+  }, [sortedData, statusFilter, dateFilter, search]);
 
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  useEffect(() => {
+    if (page > totalPages && totalPages > 0) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   const clearFilters = () => { setStatusFilter(""); setDateFilter(""); setSearch(""); setPage(1); };
 
