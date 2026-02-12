@@ -1,0 +1,55 @@
+.appShell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.appMain {
+    flex: 1;
+    margin-left: 232px;
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+
+.appContent {
+    padding: 18px 20px 22px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.loadingScreen {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-soft);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .appShell {
+        flex-direction: column;
+    }
+
+    .appMain {
+        margin-left: 0;
+    }
+
+    .appContent {
+        padding: 14px 12px 16px;
+    }
+}

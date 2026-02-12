@@ -1,0 +1,188 @@
+.adminShell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.adminSidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: rgba(254, 254, 254, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+}
+
+.sidebarLogo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+}
+
+.sidebarNav {
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.navLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.navLink:hover {
+    background: var(--bg-muted);
+    color: var(--foreground);
+}
+
+.navLinkActive {
+    background: rgba(3, 74, 166, 0.08);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.navIcon {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.sidebarFooter {
+    padding: 18px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-soft);
+}
+
+.userProfile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(3, 74, 166, 0.25);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.userRole {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary);
+    letter-spacing: 0.04em;
+}
+
+.userEmail {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adminMain {
+    flex: 1;
+    margin-left: 260px;
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+
+.adminContent {
+    padding: 18px 20px 22px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.loadingScreen {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-soft);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .adminShell {
+        flex-direction: column;
+    }
+
+    .adminSidebar {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebarNav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px 14px;
+    }
+
+    .navLink {
+        white-space: nowrap;
+        padding: 10px 14px;
+    }
+
+    .sidebarFooter {
+        display: none;
+    }
+
+    .adminMain {
+        margin-left: 0;
+    }
+
+    .adminContent {
+        padding: 14px 12px 16px;
+    }
+}

@@ -1,0 +1,78 @@
+.appHeader {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 750;
+    color: var(--foreground);
+    letter-spacing: -0.01em;
+}
+
+.headerUser {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.userName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--foreground);
+}
+
+.userEmail {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.logoutBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.logoutBtn:hover {
+    background: #FEF2F2;
+    border-color: #FECACA;
+    color: var(--error);
+}
+
+@media (max-width: 768px) {
+    .appHeader {
+        padding: 12px 12px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .userInfo {
+        display: none;
+    }
+}
